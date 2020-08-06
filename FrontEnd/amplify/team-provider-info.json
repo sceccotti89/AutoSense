@@ -1,41 +1,33 @@
 {
     "prod": {
         "awscloudformation": {
-            "AuthRoleName": "amplify-autosenseui-prod-93933-authRole",
-            "UnauthRoleArn": "arn:aws:iam::639330086870:role/amplify-autosenseui-prod-93933-unauthRole",
-            "AuthRoleArn": "arn:aws:iam::639330086870:role/amplify-autosenseui-prod-93933-authRole",
+            "AuthRoleName": "amplify-autosense-prod-114033-authRole",
+            "UnauthRoleArn": "arn:aws:iam::639330086870:role/amplify-autosense-prod-114033-unauthRole",
+            "AuthRoleArn": "arn:aws:iam::639330086870:role/amplify-autosense-prod-114033-authRole",
             "Region": "eu-central-1",
-            "DeploymentBucketName": "amplify-autosenseui-prod-93933-deployment",
-            "UnauthRoleName": "amplify-autosenseui-prod-93933-unauthRole",
-            "StackName": "amplify-autosenseui-prod-93933",
-            "StackId": "arn:aws:cloudformation:eu-central-1:639330086870:stack/amplify-autosenseui-prod-93933/cf7f04f0-d6ee-11ea-8539-0a75b60f3c60",
-            "AmplifyAppId": "d2rul15yln0vt3"
-        },
-        "categories": {
-            "hosting": {
-                "amplifyhosting": {
-                    "appId": "d2rul15yln0vt3",
-                    "type": "manual"
-                }
-            }
+            "DeploymentBucketName": "amplify-autosense-prod-114033-deployment",
+            "UnauthRoleName": "amplify-autosense-prod-114033-unauthRole",
+            "StackName": "amplify-autosense-prod-114033",
+            "StackId": "arn:aws:cloudformation:eu-central-1:639330086870:stack/amplify-autosense-prod-114033/e29d92b0-d7c8-11ea-b44e-06a619e5de86",
+            "AmplifyAppId": "d292lbfadxkx6"
         }
     },
     "dev": {
         "awscloudformation": {
-            "AuthRoleName": "amplify-autosenseui-dev-94541-authRole",
-            "UnauthRoleArn": "arn:aws:iam::639330086870:role/amplify-autosenseui-dev-94541-unauthRole",
-            "AuthRoleArn": "arn:aws:iam::639330086870:role/amplify-autosenseui-dev-94541-authRole",
+            "AuthRoleName": "amplify-autosense-dev-114535-authRole",
+            "UnauthRoleArn": "arn:aws:iam::639330086870:role/amplify-autosense-dev-114535-unauthRole",
+            "AuthRoleArn": "arn:aws:iam::639330086870:role/amplify-autosense-dev-114535-authRole",
             "Region": "eu-central-1",
-            "DeploymentBucketName": "amplify-autosenseui-dev-94541-deployment",
-            "UnauthRoleName": "amplify-autosenseui-dev-94541-unauthRole",
-            "StackName": "amplify-autosenseui-dev-94541",
-            "StackId": "arn:aws:cloudformation:eu-central-1:639330086870:stack/amplify-autosenseui-dev-94541/aa5b7630-d6ef-11ea-8a19-0ab7fff4b680",
-            "AmplifyAppId": "d2rul15yln0vt3"
+            "DeploymentBucketName": "amplify-autosense-dev-114535-deployment",
+            "UnauthRoleName": "amplify-autosense-dev-114535-unauthRole",
+            "StackName": "amplify-autosense-dev-114535",
+            "StackId": "arn:aws:cloudformation:eu-central-1:639330086870:stack/amplify-autosense-dev-114535/96d2b0d0-d7c9-11ea-9911-0a183fb629f8",
+            "AmplifyAppId": "d292lbfadxkx6"
         },
         "categories": {
             "hosting": {
                 "amplifyhosting": {
-                    "appId": "d2rul15yln0vt3",
+                    "appId": "d292lbfadxkx6",
                     "type": "manual"
                 }
             }
