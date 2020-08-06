@@ -87,7 +87,7 @@ jobs:
           aws configure set default.region eu-central-1
           npm install
           npm install -g @aws-amplify/cli@latest
-          amplify pull --accessKeyId ${{ secrets.AWS_AMPLIFY_ACCESS_KEY }} --secretAccessKey ${{ secrets.AWS_AMPLIFY_SECRET_ACCESS_KEY }} --region eu-central-1 --envName ${{ env.STAGE }} --appId d2rul15yln0vt3 --yes
+          amplify pull --accessKeyId ${{ secrets.AWS_AMPLIFY_ACCESS_KEY }} --secretAccessKey ${{ secrets.AWS_AMPLIFY_SECRET_ACCESS_KEY }} --region eu-central-1 --envName ${{ env.STAGE }} --appId ${{ secrets.AWS_AMPLIFY_APP_ID }} --yes
           cp 'amplify-configs/project-config.${{ env.STAGE }}.json' amplify/.config/project-config.json
           amplify publish
         working-directory: ./FrontEnd
