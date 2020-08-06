@@ -1,12 +1,12 @@
 {
-    "projectName": "AutoSenseUI",
+    "projectName": "AutoSense",
     "version": "3.0",
     "frontend": "javascript",
     "javascript": {
         "framework": "angular",
         "config": {
             "SourceDir": "src",
-            "DistributionDir": "dist/autosense",
+            "DistributionDir": "dist",
             "BuildCommand": "npm run build",
             "StartCommand": "ng serve"
         }
