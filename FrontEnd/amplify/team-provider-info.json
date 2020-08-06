@@ -10,6 +10,14 @@
             "StackName": "amplify-autosense-dev-141344",
             "StackId": "arn:aws:cloudformation:eu-central-1:639330086870:stack/amplify-autosense-dev-141344/46ba56b0-d7de-11ea-ad2c-02310af8dee8",
             "AmplifyAppId": "d2pldw8ud20gv5"
+        },
+        "categories": {
+            "hosting": {
+                "amplifyhosting": {
+                    "appId": "d2pldw8ud20gv5",
+                    "type": "manual"
+                }
+            }
         }
     },
     "prod": {
