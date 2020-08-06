@@ -35,6 +35,7 @@ jobs:
         run: npm test -- --no-watch --code-coverage --no-progress --browsers=ChromeHeadlessCI
         working-directory: ./FrontEnd
       - name: e2e Test Front-End
+        if: contains(github.ref, 'develop') || contains(github.ref, 'feature/')
         run: npm run e2e:ci
         working-directory: ./FrontEnd
       
