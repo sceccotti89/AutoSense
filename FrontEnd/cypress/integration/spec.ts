@@ -1,31 +1,30 @@
 describe('When starting page is loaded', () => {
   beforeEach(() => {
-    // enable response stubbing
-    cy.server();
+    // Enable response stubbing
+    // cy.server();
+    cy.visit('/');
   });
 
   it('create a new car', () => {
-    cy.route('GET',                 // Route all GET requests
-      '/*/get-all-fleet',           // that have a URL that matches '/get-all-fleet'
-      'fixture:empty-response.json' // and force the response to be: []
-    );
+    // cy.route('GET',                 // Route all GET requests
+    //   '/*/get-all-fleet',           // that have a URL that matches '/get-all-fleet'
+    //   'fixture:empty-response.json' // and force the response to be: []
+    // );
 
-    cy.route('POST',
-      '/*/add-car-fleet',
-      {}
-    );
+    // cy.route('POST',
+    //   '/*/add-car-fleet',
+    //   {}
+    // );
 
-    cy.visit('/');
-
-    cy.get('#no-fleet-message');
+    // cy.get('#no-fleet-message');
 
     cy.get('#add-car-button').click();
 
     // Fill-in the modal with the elements.
-    cy.get('#name').type('name1');
-    cy.get('#vin').type('vin1');
-    cy.get('#make').type('make1');
-    cy.get('#title').type('title1');
+    cy.get('#name').type('name');
+    cy.get('#vin').type('vin');
+    cy.get('#make').type('make');
+    cy.get('#title').type('title');
     cy.get('#year').type('2020');
     cy.get('#fuelType').type('fuel type');
     cy.get('#type').type('cwecwe');
@@ -41,24 +40,22 @@ describe('When starting page is loaded', () => {
   });
 
   it('select and delete car', () => {
-    cy.route('GET',                 // Route all GET requests
-      '/*/get-all-fleet',           // that have a URL that matches '/get-all-fleet'
-      'fixture:fleet-response.json' // and force the response to contain cars
-    );
+    // cy.route('GET',                 // Route all GET requests
+    //   '/*/get-all-fleet',           // that have a URL that matches '/get-all-fleet'
+    //   'fixture:fleet-response.json' // and force the response to contain cars
+    // );
 
-    cy.route('GET',                       // Route all GET requests
-      '/*/get-car-fleet/*',               // that have a URL that matches '/get-car-fleet/*'
-      'fixture:car-details-response.json' // and force the response to contain car details
-    );
+    // cy.route('GET',                       // Route all GET requests
+    //   '/*/get-car-fleet/*',               // that have a URL that matches '/get-car-fleet/*'
+    //   'fixture:car-details-response.json' // and force the response to contain car details
+    // );
 
-    cy.route('DELETE',                 // Route all DELETE requests
-      '/*/delete-car-fleet/*',         // that have a URL that matches '/delete-car-fleet/*'
-      {}                               // and force the response to be empty
-    );
+    // cy.route('DELETE',                 // Route all DELETE requests
+    //   '/*/delete-car-fleet/*',         // that have a URL that matches '/delete-car-fleet/*'
+    //   {}                               // and force the response to be empty
+    // );
 
-    cy.visit('/');
-
-    cy.get('tbody > .car-row').should('have.length', 2);
+    // cy.get('tbody > .car-row').should('have.length', 2);
     cy.get('tbody > .car-row').last().click();
 
     cy.get('#delete-car-button').click();

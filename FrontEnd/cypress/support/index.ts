@@ -13,5 +13,5 @@
 // https://on.cypress.io/configuration
 // ***********************************************************
 
-// When a command from ./commands is ready to use, import with `import * as commands from './commands'` syntax
-// import * as commands from './commands';
+// Import commands.js using ES2015 syntax:
+import "./commands";
