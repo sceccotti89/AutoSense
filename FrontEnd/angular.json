@@ -117,42 +117,6 @@
               "**/node_modules/**"
             ]
           }
-        },
-        "e2e": {
-          "builder": "@angular-devkit/build-angular:protractor",
-          "options": {
-            "protractorConfig": "e2e/protractor.conf.js",
-            "devServerTarget": "autosense:serve"
-          },
-          "configurations": {
-            "production": {
-              "devServerTarget": "autosense:serve:production"
-            }
-          }
-        },
-        "cypress-run": {
-          "builder": "@briebug/cypress-schematic:cypress",
-          "options": {
-            "devServerTarget": "autosense:serve"
-          },
-          "configurations": {
-            "production": {
-              "devServerTarget": "autosense:serve:production"
-            }
-          }
-        },
-        "cypress-open": {
-          "builder": "@briebug/cypress-schematic:cypress",
-          "options": {
-            "devServerTarget": "autosense:serve",
-            "watch": true,
-            "headless": false
-          },
-          "configurations": {
-            "production": {
-              "devServerTarget": "autosense:serve:production"
-            }
-          }
         }
       }
     }
