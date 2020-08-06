@@ -25,7 +25,7 @@ The internal structure of the project is composed of 3 main folders:
 
 The following is the complete architecture of the application:
 
-<a href='https://github.com/sceccotti89/AutoSense/blob/master/documentation/Documentation/AWS_Diagram.png'><img src='https://github.com/sceccotti89/AutoSense/blob/master/documentation/Documentation/AWS_Diagram.png' height='200' width='600' alt='AWS Diagram' aria-label='aws_diagram' /></a>
+<a href='https://github.com/sceccotti89/AutoSense/blob/master/Documentation/AWS_Diagram.png'><img src='https://github.com/sceccotti89/AutoSense/blob/master/Documentation/AWS_Diagram.png' height='200' width='600' alt='AWS Diagram' aria-label='aws_diagram' /></a>
 
 This architecture has been deployed for 2 different environments: **dev** (for testing) and **prod** (for the public release), reachable at these addresses:
 
