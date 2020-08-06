@@ -2,11 +2,11 @@
 
 ![CI](https://github.com/sceccotti89/AutoSense/workflows/CI/badge.svg?branch=master)
 
-This project has been developed for autoSense AG (https://autosense.ch/).
+The AutoSense project is a fleet management online service designed and implemented using cutting-edge technologies such as Angular and AWS.
 
 <!-- TOC depthFrom:2 depthTo:6 withLinks:1 updateOnSave:1 orderedList:0 -->
 
-- [Introduction](#introduction)
+- [Architecture](#architecture)
 - [Back-End](#back-end)
   - [Execution](#execution)
   - [Testing](#testing)
@@ -15,7 +15,7 @@ This project has been developed for autoSense AG (https://autosense.ch/).
   - [Testing](#testing)
 - [GitHub Pipeline](#github-pipeline)
 
-## Introduction
+## Architecture
 
 The internal structure of the project is composed of 3 main folders:
 
@@ -25,26 +25,27 @@ The internal structure of the project is composed of 3 main folders:
 
 The following is the complete architecture of the application:
 
-<a href='https://github.com/sceccotti89/AutoSense/blob/feature/documentation/Documentation/AWS_Diagram.png'><img src='https://github.com/sceccotti89/AutoSense/blob/feature/documentation/Documentation/AWS_Diagram.png' height='200' width='600' alt='AWS Diagram' aria-label='aws_diagram' /></a>
+<a href='https://github.com/sceccotti89/AutoSense/blob/master/documentation/Documentation/AWS_Diagram.png'><img src='https://github.com/sceccotti89/AutoSense/blob/master/documentation/Documentation/AWS_Diagram.png' height='200' width='600' alt='AWS Diagram' aria-label='aws_diagram' /></a>
 
-We will discuss deeply about it in the following sections.<br/>
-The above architecture has been deployed for 2 different environments: **dev** (for testing) and **prod** (for the public release), reachable at https://dev.d2pldw8ud20gv5.amplifyapp.com/ and https://prod.d2pldw8ud20gv5.amplifyapp.com/ respectively.
+This architecture has been deployed for 2 different environments: **dev** (for testing) and **prod** (for the public release), reachable at these addresses:
+
+- dev:  https://dev.d2pldw8ud20gv5.amplifyapp.com/
+- prod: https://prod.d2pldw8ud20gv5.amplifyapp.com/
 
 ## Back-End
 
-The back-end infrastructure is deployed using *serverless*. By means of a YAML file you are able to define services and roles very easily. All the requests are served by an API Gateway, which in turn is connected to a proper AWS Lambda according to the given url. Each Lambda is then connected to DynamoDB, used to store each car of the fleet. We can fetch the whole fleet or get, add, and delete a single car.<br/>
-Because there is no authentication nor authorization phase, all the HTTP(S) requests must include an *API-KEY*, different for each environment. Without it you'll get a 403 (Forbidden) as a response.
+The whole back-end infrastructure is deployed using *serverless*, defining the following services: an API Gateway used to gather all the incoming requests from outside. This in turn is connected to a proper AWS Lambda according to the given url. Each Lambda is then connected to DynamoDB, used to manage all the operations on the fleet. We can fetch the whole fleet but we can also get, add, and delete a single car.<br/>
+Because there is no authentication nor authorization layer, all the HTTP requests must include an *API-KEY*, different for each environment. Without it you'll get a 403 (Forbidden) as a response.
 
 ### Execution
 
-To test each lambda locally you must first run DynamoDB locally either following this guide https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/DynamoDBLocal.html or running it inside a Docker container (suggested) and configure each lambda to be connected to it.
-Then you can type the following command:
+To test each AWS Lambda locally you should first run DynamoDB locally either installing it on your machine or inside a Docker container. Once it has been set up you should change the database connection on the Lambdas to point to the local one. Finally you can run a Lambda using this command:
 
 ```bash
 serverless invoke -f "function-name" -l
 ```
 
-where function-name is the name of your lambda function.
+where function-name is the name of the lambda function. The -f argument specifies the function to invoke and the -l flag tells serverless to output the logs to the console.
 
 ### Testing
 
@@ -52,15 +53,16 @@ Unit tests can be executed running this command:
 
 ```bash
 npm run test
-```
 
-which is based on the *mocha* command.
+//alias for
+mocha -r ts-node/register ./**/*.spec.ts
+```
 
 ## Front-End
 
-The front-end application has been implemented using Angular to produce a Single Page Application (SPA). It's a Mobile First - namely it runs perfectly on any device and resolution - and a Progressive Web App (PWA) - meaning that you are still able to access the application also in offline mode - application. In case of a newer version the user is prompted to reload the page.
+The front-end application has been implemented using Angular to produce a Single Page Application (SPA). It's a Mobile First - namely it runs on any device and resolution - and Progressive Web App (PWA) application - meaning that you are able to access a cached version of the application when offline. In case a newer version of the application has been deployed the user is asked to reload the page.
 
-It is deployed using AWS Amplify. It's a tool provided by Amazon Web Service to help you deploy a Web Application in few steps, with the ability to manage multiple environments. It comes with interesting features, like integration with HTTPS and *Restrict Access*. Thanks to that, the *dev* environment can be accessed only with username and password (user: **test**, pwd: **testers**).
+It is deployed using AWS Amplify. It's a tool provided by Amazon Web Service to help you deploy a Web Application in few steps, with the capability to manage multiple environments. It comes with interesting features, such as integration with HTTPS and *Restrict Access*. Thanks to that, specific environments can be accessed only with username and password (to access the *dev* environment you can use the following credentials, user: **test**, pwd: **testers**).
 
 ### Execution
 
@@ -68,18 +70,21 @@ To run the front-end application you only have to type:
 
 ```bash
 npm run start
+
+//alias for
+ng serve
 ```
 
-This will execute the application in *dev* environment.<br/>
+using the *dev* environment settings.<br/>
 The command:
 
 ```bash
 npm run start -- --prod
 ```
 
-won't work, because the environment file for production doesn't contain a valid value for the the API KEYs (it contains placeholders that will be replaced during deployment time in the GitHub Pipeline).
+won't work, because the production environment file doesn't contain valid API KEYs (it only contains placeholders that will be replaced at deployment time in the GitHub Pipeline).
 
-To run the application as a PWA, you need to build it first with the *--prod* flag, run a local web server where you built the application (I suggest using the http-server package for an easy deploy) and finally open the web page at the address of the server. You should see some error messages (because of the keys) but you should be able to play with the application also in offline mode.
+To run the application as a PWA, you need first to build it first with the *--prod* flag, then run a local web server in the same folder of the built application (I suggest using the http-server package for an easy deploy) and finally open the web page at the server address. You should see some error messages (because of the wrong keys) but you should be able to play with the application also in offline mode.
 
 ### Testing
 
@@ -88,10 +93,13 @@ To run unit tests just type:
 
 ```bash
 npm run test
+
+//alias for
+ng test
 ```
 
-This command will tests all the *\*.spec.ts* files.<br/>
-If you need to run them in headless mode (particularly usefull in Continous Integration environments), then run the above command with the following flags:
+This command will tests all the *\*.spec.ts* files inside the */src* folder.<br/>
+If you need to run them in headless mode (particularly useful in Continous Integration environments), then run the above command with the following flags:
 
 ```bash
 npm run test -- --no-watch --code-coverage --no-progress --browsers=ChromeHeadlessCI
@@ -101,28 +109,31 @@ Also the e2e tests can be run in 2 different ways:
 
 ```bash
 npm run e2e
+//alias for
+ng run autosense:cypress-open
 ```
 
-that will execute e2e test in watch mode using Cypress.
-The other way is by using:
+that will execute e2e tests in watch mode using Cypress. Any changes to the code will automatically run again all tests.<br/>
+The other option is the headless mode:
 
 ```bash
 npm run e2e:ci
+
+//alias for
+start-server-and-test start http://localhost:4200 cy:run
 ```
 
-that will run tests in headless mode.
-
-Note that e2e tests are not running in master to prevent any possible database issue with the production environment.
+Note that e2e tests are not running in *master* to prevent any database "pollution" in the production environment.
 
 ## GitHub Pipeline
 
-To deploy both front-end and back-end I used the GitHub Pipeline, automating the workflow of the application. All the sensitive data are stored in the secret store of the repositiory. Only authorized people can access them.
+To deploy both front-end and back-end I used the GitHub Pipeline, in order to automate the workflow of the application. Sensitive data are stored in the Secrets storage of the repository. Only authorized people can access them.
 
-The workflow is defined in 2 steps:
+The workflow is consisted of 2 steps:
 
 - **test**: here is where we run all the tests (unit and integration)
-- **deploy**: in which we deploy the front-end (using AWS Amplify) and the back-end (serverless) 
+- **deploy**: in which we deploy the front-end (using AWS Amplify) and the back-end (serverless) services
 
-In cae the *test* phase fails, the deploy step is not executed.<br/>
-In order to deploy everything to the right environment a variable named *STAGE* is define in the *deploy* step. It assumes the value *prod* in case of a push/pull-request to master, *dev* in all other cases (develop or feature/* branch).<br/>
-API KEYs replacements is performed using the powerful *sed* command using placeholders contained in the environment.prod.ts file of the UI. This is performed for the *master* branch only.
+In case the *test* job fails, the *deploy* step is not executed and you'll receive an email containing the failing commit.<br/>
+In order to deploy everything to the right environment the script make use of a variable named *STAGE*. It assumes the value *prod* in case of a push/pull-request to master, *dev* in all other cases (develop or feature/* branch).<br/>
+API KEYs replacements is performed using the powerful *sed* command, substituing the placeholders contained in the environment.prod.ts file of the UI with the respective value in the Secrets storage. This is executed for the *master* branch only.
