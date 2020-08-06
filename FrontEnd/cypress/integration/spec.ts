@@ -56,7 +56,7 @@ describe('When starting page is loaded', () => {
     // );
 
     // cy.get('tbody > .car-row').should('have.length', 2);
-    cy.get('tbody > .car-row').last().click();
+    cy.get('tbody > .car-row', { timeout: 10000 }).last().click();
 
     cy.get('#delete-car-button').click();
     cy.get('#confirm-delete-button').click();

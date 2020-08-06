@@ -25,7 +25,7 @@ The internal structure of the project is composed of 3 main folders:
 
 The following is the complete architecture of the application:
 
-![AWS Diagram](https://github.com/sceccotti89/AutoSense/Documentation/master/AWS_Diagram.png)
+<a href='https://github.com/sceccotti89/AutoSense/blob/feature/documentation/Documentation/AWS_Diagram.png'><img src='https://github.com/sceccotti89/AutoSense/blob/feature/documentation/Documentation/AWS_Diagram.png' height='200' width='600' alt='AWS Diagram' aria-label='aws_diagram' /></a>
 
 We will discuss deeply about it in the following sections.<br/>
 The above architecture has been deployed for 2 different environments: **dev** (for testing) and **prod** (for the public release), reachable at https://dev.d2pldw8ud20gv5.amplifyapp.com/ and https://prod.d2pldw8ud20gv5.amplifyapp.com/ respectively.
