@@ -1,0 +1,9 @@
+<button [type]="type"
+        [id]="id"
+        class="btn btn-primary main-button"
+        (click)="emitEvent()"
+        [disabled]="disabled"
+>
+    <ng-content></ng-content>
+    {{ text }}
+</button>

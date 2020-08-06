@@ -1,0 +1,19 @@
+{
+    "message": {
+        "id" : 5353453 ,
+        "name" : "Executive car 2" ,
+        "vin" : "VQV22FJPOV" ,
+        "make" : "Peugeot" ,
+        "model" : "CX-5" ,
+        "year" : 2020 ,
+        "fuelType" : "petrol" ,
+        "type" : "SUV" ,
+        "position" : {
+            "lat" : 3.995 ,
+            "lon" : 43.2221
+        },
+        "odometer" : 43546 ,
+        "fuel" : 33.4 ,
+        "battery" : 12.7
+    }
+}

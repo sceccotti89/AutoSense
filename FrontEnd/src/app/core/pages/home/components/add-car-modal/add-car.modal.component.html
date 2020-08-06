@@ -1,0 +1,88 @@
+<ng-template #template>
+    <div class="modal-header">
+        <h4 class="modal-title pull-left">Create New Car</h4>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <form (ngSubmit)="onSubmit()" #carForm="ngForm">
+            <div class="form-group">
+                <label class="paragraph title" for="name">Name</label>
+                <input type="text" class="form-control" id="name" [(ngModel)]="carModel.name" name="name" #name="ngModel"
+                       [ngClass]="{ 'border-invalid': name.invalid && (name.dirty || name.touched) && name.errors.required }" required>
+            </div>
+
+            <div class="form-group">
+                <label class="paragraph title" for="vin">Vin</label>
+                <input type="text" class="form-control" id="vin" [(ngModel)]="carModel.vin" name="vin" #vin="ngModel"
+                       [ngClass]="{ 'border-invalid': vin.invalid && (vin.dirty || vin.touched) && vin.errors.required }" required>
+            </div>
+
+            <div class="form-group">
+                <label class="paragraph title" for="make">Make</label>
+                <input type="text" class="form-control" id="make" [(ngModel)]="carModel.make" name="make" #make="ngModel"
+                       [ngClass]="{ 'border-invalid': make.invalid && (make.dirty || make.touched) && make.errors.required }" required>
+            </div>
+
+            <div class="form-group">
+                <label class="paragraph title" for="model">Model</label>
+                <input type="text" class="form-control" id="title" [(ngModel)]="carModel.model" name="model" #model="ngModel"
+                       [ngClass]="{ 'border-invalid': model.invalid && (model.dirty || model.touched) && model.errors.required }" required>
+            </div>
+
+            <div class="form-group">
+                <label class="paragraph title" for="year">Year</label>
+                <input type="number" class="form-control" id="year" [(ngModel)]="carModel.year" name="year" #year="ngModel"
+                       [ngClass]="{ 'border-invalid': year.invalid && (year.dirty || year.touched) && year.errors.required }" required>
+            </div>
+
+            <div class="form-group">
+                <label class="paragraph title" for="title">Fuel Type</label>
+                <input type="text" class="form-control" id="fuelType" [(ngModel)]="carModel.fuelType" name="fuelType" #fuelType="ngModel"
+                       [ngClass]="{ 'border-invalid': fuelType.invalid && (fuelType.dirty || fuelType.touched) && fuelType.errors.required }" required>
+            </div>
+
+            <div class="form-group">
+                <label class="paragraph title" for="type">Type</label>
+                <input type="text" class="form-control" id="type" [(ngModel)]="carModel.type" name="type" #type="ngModel"
+                       [ngClass]="{ 'border-invalid': type.invalid && (type.dirty || type.touched) && type.errors.required }" required>
+            </div>
+
+            <div class="form-group">
+                <label class="paragraph title" for="posLat">Position</label>
+                <div id="position-container">
+                    <input type="number" class="form-control" id="posLat" [(ngModel)]="carModel.position.lat" name="posLat" #posLat="ngModel" placeholder="Latitude"
+                           [ngClass]="{ 'border-invalid': posLat.invalid && (posLat.dirty || posLat.touched) && posLat.errors.required }" required>
+                    <input type="number" class="form-control" id="posLon" [(ngModel)]="carModel.position.lon" name="posLon" #posLon="ngModel" placeholder="Longitude"
+                           [ngClass]="{ 'border-invalid': posLon.invalid && (posLon.dirty || posLon.touched) && posLon.errors.required }" required>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="paragraph title" for="odometer">Odometer</label>
+                <input type="number" class="form-control" id="odometer" [(ngModel)]="carModel.odometer" name="odometer" #odometer="ngModel"
+                       [ngClass]="{ 'border-invalid': odometer.invalid && (odometer.dirty || odometer.touched) && odometer.errors.required }" required>
+            </div>
+
+            <div class="form-group">
+                <label class="paragraph title" for="fuel">Fuel</label>
+                <input type="number" class="form-control" id="fuel" [(ngModel)]="carModel.fuel" name="fuel" #fuel="ngModel"
+                       [ngClass]="{ 'border-invalid': fuel.invalid && (fuel.dirty || fuel.touched) && fuel.errors.required }" required>
+            </div>
+
+            <div class="form-group">
+                <label class="paragraph title" for="battery">Battery</label>
+                <input type="number" class="form-control" id="battery" [(ngModel)]="carModel.battery" name="battery" #battery="ngModel"
+                       [ngClass]="{ 'border-invalid': battery.invalid && (battery.dirty || battery.touched) && battery.errors.required }" required>
+            </div>
+        
+            <app-button text="Submit" type="submit" id="submit-button" [disabled]="!carForm.form.valid || loading">
+                <ng-container *ngIf="loading">
+                    <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                    <span class="sr-only">Loading...</span>
+                </ng-container>
+            </app-button>
+        </form>
+    </div>
+</ng-template>

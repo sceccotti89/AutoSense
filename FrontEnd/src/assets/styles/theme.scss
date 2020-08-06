@@ -1,0 +1,20 @@
+@import 'variables.scss';
+
+.paragraph {
+    font-size: 18px;
+    margin-bottom: 0px;
+}
+
+.title {
+    color: $main-font-color;
+    font-weight: bolder !important;
+}
+
+.main-button {
+    background-color: $main-bg-color !important;
+    border-color: $main-bg-color !important;
+}
+
+.border-invalid {
+    border: 2px solid #ff0000;
+}

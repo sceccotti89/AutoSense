@@ -1,0 +1,70 @@
+service:
+  name: 'backend'
+frameworkVersion: '>=1.72.0'
+custom:
+  webpack:
+    webpackConfig: './webpack.config.js'
+    includeModules: true
+  apiKeys:
+    - name: 'auto-sense-${opt:stage, self:provider.stage, "dev"}'
+      value: '${opt:api_key}'
+plugins:
+  - 'serverless-webpack'
+  - 'serverless-add-api-key'
+provider:
+  name: 'aws'
+  runtime: 'nodejs12.x'
+  apiGateway:
+    minimumCompressionSize: 1024
+  apiName: 'auto-sense-${opt:stage, self:provider.stage, "dev"}'
+  environment:
+    AWS_NODEJS_CONNECTION_REUSE_ENABLED: '1'
+    FLEET_TABLE: 'fleet-${opt:stage, self:provider.stage, "dev"}'
+  iamRoleStatements:
+    - Effect: "Allow"
+      Action:
+        - "dynamodb:Scan"
+        - "dynamodb:GetItem"
+        - "dynamodb:PutItem"
+        - "dynamodb:DeleteItem"
+      Resource: 'arn:aws:dynamodb:eu-central-1:*:table/fleet-${opt:stage, self:provider.stage, "dev"}'
+functions:
+  getFleet:
+    handler: 'lambdas/src/getFleet.handler'
+    name: 'getFleet-${opt:stage, self:provider.stage, "dev"}'
+    events:
+      - http:
+          method: 'get'
+          path: 'get-all-fleet'
+          cors: true
+          private: true
+  getCarFromFleet:
+    handler: 'lambdas/src/getCarFromFleet.handler'
+    name: 'getCarFromFleet-${opt:stage, self:provider.stage, "dev"}'
+    events:
+      - http:
+          method: 'get'
+          path: 'get-car-fleet/{carId}'
+          cors: true
+          private: true
+  addCarToFleet:
+    handler: 'lambdas/src/addCarToFleet.handler'
+    name: 'addCarToFleet-${opt:stage, self:provider.stage, "dev"}'
+    events:
+      - http:
+          method: 'post'
+          path: 'add-car-fleet'
+          cors: true
+          private: true
+  deleteCarFromFleet:
+    handler: 'lambdas/src/deleteCarFromFleet.handler'
+    name: 'deleteCarFromFleet-${opt:stage, self:provider.stage, "dev"}'
+    events:
+      - http:
+          method: 'delete'
+          path: 'delete-car-fleet/{carId}'
+          cors: true
+          private: true
+resources:
+  - ${file(aws-serverless/api-gateway-errors.yml)}
+  - ${file(aws-serverless/dynamo-db-tables.yml)}

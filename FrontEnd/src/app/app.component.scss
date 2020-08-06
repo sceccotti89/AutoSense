@@ -1,0 +1,9 @@
+@import '../assets/styles/variables.scss';
+
+.wrapper {
+    position: relative;
+    background-color: rgb(255, 255, 255);
+    top: $height-top-navbar;
+    padding: 15px 10px 0 10px;
+    height: calc(100% - #{$height-top-navbar});
+}

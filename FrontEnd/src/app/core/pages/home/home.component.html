@@ -1,0 +1,38 @@
+<div id="main-page">
+    <div *ngIf="loading">
+        <div id="spinner" class="d-flex justify-content-center">
+            <div class="spinner-border" role="status">
+                <span class="sr-only">Loading...</span>
+            </div>
+        </div>
+    </div>
+    
+    <div *ngIf="!loading">
+        <app-button text="Add New Car" id="add-car-button" (clickEvent)="openAddCarModal()"></app-button>
+        
+        <div id="fleet-container">
+            <div id="no-fleet-message" *ngIf="fleet.length == 0">
+                {{ textMessage }}
+            </div>
+            <div id="fleet-list" *ngIf="fleet.length > 0">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th scope="col">Name</th>
+                            <th scope="col">Make</th>
+                            <th scope="col">Model</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="car-row" *ngFor="let car of fleet" (click)="selectRow(car)">
+                            <td>{{ car.name }}</td>
+                            <td>{{ car.make }}</td>
+                            <td>{{ car.model }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<app-add-car-modal (addedCarEvent)="loadFleet()"></app-add-car-modal>

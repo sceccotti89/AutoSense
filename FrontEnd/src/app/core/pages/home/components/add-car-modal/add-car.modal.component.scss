@@ -1,0 +1,14 @@
+@import '../../../../../../assets/styles/mixins/flexbox-mixins.scss';
+
+#position-container {
+    @include flexbox();
+
+    #posLat {
+        @include flex(0, 0, 50%);
+        margin-right: 3px;
+    }
+    #posLon {
+        @include flex(0, 0, 50%);
+        margin-left: 3px;
+    }
+}

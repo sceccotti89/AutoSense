@@ -1,0 +1,1 @@
+![CI](https://github.com/sceccotti89/AutoSense/workflows/CI/badge.svg?branch=master)
