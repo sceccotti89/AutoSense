@@ -6,6 +6,9 @@ on:
   pull_request:
     branches: [ master ]
 
+env:
+  IS_PROD_OR_DEV: github.ref == 'refs/heads/master' || github.ref == 'refs/heads/develop'
+
 jobs:
   test_backend:
     runs-on: ubuntu-latest
@@ -41,14 +44,11 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       
-      - env:
-          EXECUTE: github.ref == 'refs/heads/master' || github.ref == 'refs/heads/develop'
-      
       - run: echo "::set-env name=STAGE::$(if [ ${{ github.ref }} == 'refs/heads/master' ]; then echo 'prod'; else echo 'dev'; fi)"
       - run: echo "::set-env name=AWS_API_KEY::$(if [ ${{ github.ref }} == 'refs/heads/master' ]; then echo ${{ secrets.AWS_API_KEY_PROD }}; else echo ${{ secrets.AWS_API_KEY_DEV }}; fi)"
 
       - name: Cache node modules
-        if: ${{ env.EXECUTE }}
+        if: ${{ env.IS_PROD_OR_DEV }}
         uses: actions/cache@v2
         env:
           cache-name: cache-node-modules
@@ -62,17 +62,17 @@ jobs:
             ${{ runner.os }}-
 
       - name: Use Node.js 12.18.2
-        if: ${{ env.EXECUTE }}
+        if: ${{ env.IS_PROD_OR_DEV }}
         uses: actions/setup-node@v1
         with:
           node-version: 12.18.2
 
       - name: Install serveless dependencies
-        if: ${{ env.EXECUTE }}
+        if: ${{ env.IS_PROD_OR_DEV }}
         run: npm install
         working-directory: ./BackEnd
       - name: Deploy serverless
-        if: ${{ env.EXECUTE }}
+        if: ${{ env.IS_PROD_OR_DEV }}
         uses: aaronpanch/action-serverless@master
         with:
           args: deploy --stage ${{ env.STAGE }} --region eu-central-1 --conceal --api_key ${{ env.AWS_API_KEY }}
