@@ -39,6 +39,8 @@ jobs:
     needs: test_backend
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v2
+      
       - env:
           EXECUTE: github.ref == 'refs/heads/master' || github.ref == 'refs/heads/develop'
       
@@ -58,7 +60,7 @@ jobs:
             ${{ runner.os }}-build-${{ env.cache-name }}-
             ${{ runner.os }}-build-
             ${{ runner.os }}-
-      - uses: actions/checkout@v2
+
       - name: Use Node.js 12.18.2
         if: ${{ env.EXECUTE }}
         uses: actions/setup-node@v1
