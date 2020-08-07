@@ -75,7 +75,7 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SERVERLESS_SECRET_ACCESS_KEY }}
 
   test_frontend:
-    if: ${{ steps.deploy_backend.conclusion == 'success' }} || ${{ steps.deploy_backend.conclusion == 'skipped' }} 
+    needs: deploy_backend.result == 'success' || deploy_backend.result == 'cancelled' 
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
