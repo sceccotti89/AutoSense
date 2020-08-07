@@ -38,6 +38,7 @@ jobs:
   deploy_backend:
     needs: test_backend
     runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/master' || github.ref == 'refs/heads/develop'
     steps:
       - run: echo "::set-env name=STAGE::$(if [ ${{ github.ref }} == 'refs/heads/master' ]; then echo 'prod'; else echo 'dev'; fi)"
       - run: echo "::set-env name=AWS_API_KEY::$(if [ ${{ github.ref }} == 'refs/heads/master' ]; then echo ${{ secrets.AWS_API_KEY_PROD }}; else echo ${{ secrets.AWS_API_KEY_DEV }}; fi)"
@@ -62,11 +63,9 @@ jobs:
           node-version: 12.18.2
 
       - name: Install serveless dependencies
-        if: github.ref == 'refs/heads/master' || github.ref == 'refs/heads/develop'
         run: npm install
         working-directory: ./BackEnd
       - name: Deploy serverless
-        if: github.ref == 'refs/heads/master' || github.ref == 'refs/heads/develop'
         uses: aaronpanch/action-serverless@master
         with:
           args: deploy --stage ${{ env.STAGE }} --region eu-central-1 --conceal --api_key ${{ env.AWS_API_KEY }}
@@ -76,7 +75,7 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SERVERLESS_SECRET_ACCESS_KEY }}
 
   test_frontend:
-    needs: deploy_backend
+    if: ${{ steps.deploy_backend.conclusion == 'success' }} || ${{ steps.deploy_backend.conclusion == 'skipped' }} 
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
