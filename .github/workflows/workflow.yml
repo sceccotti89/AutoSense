@@ -75,6 +75,7 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SERVERLESS_SECRET_ACCESS_KEY }}
 
   test_frontend:
+    needs: deploy_backend
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
