@@ -2,12 +2,79 @@ name: CI
 
 on:
   push:
-    branches: [ master, develop, 'feature/*' ]
+    branches: [ master, develop, 'feature/**' ]
   pull_request:
     branches: [ master ]
 
 jobs:
-  test:
+  test_backend:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Use Node.js 12.18.2
+        uses: actions/setup-node@v1
+        with:
+          node-version: 12.18.2
+      - name: Cache node modules
+        uses: actions/cache@v2
+        env:
+          cache-name: cache-node-modules
+        with:
+          # npm cache files are stored in `~/.npm` on Linux/macOS
+          path: ~/.npm
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-build-${{ env.cache-name }}-
+            ${{ runner.os }}-build-
+            ${{ runner.os }}-
+      
+      - name: Install Back-End dependencies
+        run: npm install
+        working-directory: ./BackEnd
+      - name: Test Back-End
+        run: npm test
+        working-directory: ./BackEnd
+  
+    deploy_backend:
+      needs: test_backend
+      runs-on: ubuntu-latest
+      if: github.ref == 'refs/heads/master' || github.ref == 'refs/heads/develop'
+      steps:
+        - run: echo "::set-env name=STAGE::$(if [ ${{ github.ref }} == 'refs/heads/master' ]; then echo 'prod'; else echo 'dev'; fi)"
+        - run: echo "::set-env name=AWS_API_KEY::$(if [ ${{ github.ref }} == 'refs/heads/master' ]; then echo ${{ secrets.AWS_API_KEY_PROD }}; else echo ${{ secrets.AWS_API_KEY_DEV }}; fi)"
+  
+        - name: Cache node modules
+          uses: actions/cache@v2
+          env:
+            cache-name: cache-node-modules
+          with:
+            # npm cache files are stored in `~/.npm` on Linux/macOS
+            path: ~/.npm
+            key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
+            restore-keys: |
+              ${{ runner.os }}-build-${{ env.cache-name }}-
+              ${{ runner.os }}-build-
+              ${{ runner.os }}-
+  
+        - uses: actions/checkout@v2
+        - name: Use Node.js 12.18.2
+          uses: actions/setup-node@v1
+          with:
+            node-version: 12.18.2
+  
+        - name: Install serveless dependencies
+          run: npm install
+          working-directory: ./BackEnd
+        - name: Deploy serverless
+          uses: aaronpanch/action-serverless@master
+          with:
+            args: deploy --stage ${{ env.STAGE }} --region eu-central-1 --conceal --api_key ${{ env.AWS_API_KEY }}
+          env:
+            SERVICE_ROOT: './BackEnd'
+            AWS_ACCESS_KEY_ID: ${{ secrets.AWS_SERVERLESS_ACCESS_KEY }}
+            AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SERVERLESS_SECRET_ACCESS_KEY }}
+
+  test_frontend:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -35,25 +102,17 @@ jobs:
         run: npm test -- --no-watch --code-coverage --no-progress --browsers=ChromeHeadlessCI
         working-directory: ./FrontEnd
       - name: e2e Test Front-End
-        if: contains(github.ref, 'develop') || contains(github.ref, 'feature/')
+        if: github.ref != 'refs/heads/master'
         run: npm run e2e:ci
         working-directory: ./FrontEnd
-      
-      - name: Install Back-End dependencies
-        run: npm install
-        working-directory: ./BackEnd
-      - name: Test Back-End
-        run: npm test
-        working-directory: ./BackEnd
 
-  deploy:
-    needs: test
+  deploy_frontend:
+    needs: test_frontend
     runs-on: ubuntu-latest
-    if: contains(github.ref, 'master') || contains(github.ref, 'develop')
+    if: github.ref == 'refs/heads/master' || github.ref == 'refs/heads/develop'
     steps:
       - run: echo "::set-env name=STAGE::$(if [ ${{ github.ref }} == 'refs/heads/master' ]; then echo 'prod'; else echo 'dev'; fi)"
-      - run: echo "::set-env name=AWS_API_KEY::$(if [ ${{ github.ref }} == 'refs/heads/master' ]; then echo ${{ secrets.AWS_API_KEY_PROD }}; else echo ${{ secrets.AWS_API_KEY_DEV }}; fi)"
-
+      
       - name: Cache node modules
         uses: actions/cache@v2
         env:
@@ -92,15 +151,3 @@ jobs:
           cp 'amplify-configs/project-config.${{ env.STAGE }}.json' amplify/.config/project-config.json
           amplify publish
         working-directory: ./FrontEnd
-
-      - name: Install serveless dependencies
-        run: npm install
-        working-directory: ./BackEnd
-      - name: Deploy serverless
-        uses: aaronpanch/action-serverless@master
-        with:
-          args: deploy --stage ${{ env.STAGE }} --region eu-central-1 --conceal --api_key ${{ env.AWS_API_KEY }}
-        env:
-          SERVICE_ROOT: './BackEnd'
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_SERVERLESS_ACCESS_KEY }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SERVERLESS_SECRET_ACCESS_KEY }}
