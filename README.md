@@ -44,7 +44,13 @@ Because there is no authentication nor authorization layer, all the HTTP request
 
 ### Execution
 
-To test each AWS Lambda locally you should first run DynamoDB locally. To accomplish this you can run the **run-dinamo-db.sh** script inside the *dynamoDB* folder. Be careful, before running it you should have installed *Docker* and edited the *aws-configure.sh* script to use your AWS account replacing *** with your credentials. Finally you can run a Lambda using this command:
+First we need to install the required packages this way:
+
+```bash
+npm install
+```
+
+To execute an AWS Lambda locally you should first run DynamoDB on your machine. To accomplish this you can run the **run-dinamo-db.sh** script inside the *dynamoDB* folder. Be careful, before running it you should have installed *Docker* and edited the *aws-configure.sh* script to use your AWS account replacing *** with your credentials. Finally you can run a Lambda using this command:
 
 ```bash
 serverless invoke local -f "function-name" -e AWS_LOCAL=1
@@ -142,6 +148,8 @@ The workflow is consisted of 2 steps:
 - **deploy**: in which we deploy the front-end (using AWS Amplify) and the back-end (using serverless) services
 
 Those 2 steps are replicated for front- and back-end. First start with the back-end steps, then if successful, start the front-end ones. This specific order comes to the rescue when any of the already deployed API are changed: you might get an error while running the front-end integration tests. With this solution we make sure that the new API are deployed before starting integrations tests on them.
-If the *test* job fails, the *deploy* step is not executed and you'll receive an email containing the failing commit.<br/>
-In order to deploy everything to the right environment the script make use of a variable named *STAGE*. It assumes the value *prod* in case of a push/pull-request to master, *dev* in all other cases (develop or feature/* branch).<br/>
+If the *test* job fails, the *deploy* step is not executed and you'll receive an email containing the failing commit.
+
+In order to deploy everything to the right environment the script make use of a variable named *STAGE*. It assumes the value *prod* in case of a push/pull-request to master, *dev* in all other cases (develop or feature/* branch).
+
 API KEYs replacements is performed using the powerful *sed* command, substituing the placeholders contained in the environment.prod.ts file of the UI with the respective value in the Secrets storage. This is executed for the *master* branch only.
