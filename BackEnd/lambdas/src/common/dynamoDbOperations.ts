@@ -13,7 +13,7 @@ export const isUuid = (id: string): boolean => uuidv4_regex.test(id);
 
 export const scan = (params: ScanInput): Promise<Response> => {
     return new Promise<Response>((resolve, reject) => {
-        const dynamoDB = new AWS.DynamoDB({ region: 'eu-central-1', apiVersion: '2012-08-10' });
+        const dynamoDB = new AWS.DynamoDB(getClientConfiguration());
         dynamoDB.scan(params, (err, data) => {
             if (err) {
                 console.log(err, err.stack);
@@ -30,7 +30,7 @@ export const scan = (params: ScanInput): Promise<Response> => {
 
 export const getItem = (params: GetItemInput): Promise<Response> => {
     return new Promise<Response>((resolve, reject) => {
-        const dynamoDB = new AWS.DynamoDB({ region: 'eu-central-1', apiVersion: '2012-08-10' });
+        const dynamoDB = new AWS.DynamoDB(getClientConfiguration());
         dynamoDB.getItem(params, (err, data) => {
             if (err) {
                 console.log(err, err.stack);
@@ -49,7 +49,7 @@ export const getItem = (params: GetItemInput): Promise<Response> => {
 
 export const putItem = (params: PutItemInput): Promise<Response> => {
     return new Promise<Response>((resolve, reject) => {
-        const dynamoDB = new AWS.DynamoDB({ region: 'eu-central-1', apiVersion: '2012-08-10' });
+        const dynamoDB = new AWS.DynamoDB(getClientConfiguration());
         dynamoDB.putItem(params, (err, _data) => {
             if (err) {
                 console.log(err, err.stack);
@@ -63,7 +63,7 @@ export const putItem = (params: PutItemInput): Promise<Response> => {
 
 export const deleteItem = (params: DeleteItemInput): Promise<Response> => {
     return new Promise<Response>((resolve, reject) => {
-        const dynamoDB = new AWS.DynamoDB({ region: 'eu-central-1', apiVersion: '2012-08-10' });
+        const dynamoDB = new AWS.DynamoDB(getClientConfiguration());
         dynamoDB.deleteItem(params, (err, _data) => {
             if (err) {
                 console.log(err, err.stack);
@@ -73,4 +73,15 @@ export const deleteItem = (params: DeleteItemInput): Promise<Response> => {
             }
         });
     });
+};
+
+const getClientConfiguration = (): AWS.DynamoDB.ClientConfiguration => {
+    const configuration: AWS.DynamoDB.ClientConfiguration = {
+        region: 'eu-central-1',
+        apiVersion: '2012-08-10'
+    };
+    if (process.env.AWS_LOCAL) {
+        configuration.endpoint = 'http://localhost:8500';
+    }
+    return configuration;
 };

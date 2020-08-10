@@ -12,6 +12,7 @@
     "aws-sdk": "^2.720.0",
     "http-status-codes": "^1.4.0",
     "node-validator": "^0.1.27",
+    "serverless": "^1.78.1",
     "source-map-support": "^0.5.10",
     "uuid": "^8.2.0"
   },

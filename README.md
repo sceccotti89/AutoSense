@@ -11,8 +11,8 @@ The AutoSense project is a fleet management online service designed and implemen
   - [Execution](#execution)
   - [Testing](#testing)
 - [Front-End](#front-end)
-  - [Execution](#execution)
-  - [Testing](#testing)
+  - [UI Execution](#ui-execution)
+  - [UI Testing](#ui-testing)
 - [GitHub Pipeline](#github-pipeline)
 
 ## Architecture
@@ -34,18 +34,23 @@ This architecture has been deployed for 2 different environments: **dev** (for t
 
 ## Back-End
 
-The whole back-end infrastructure is deployed using *serverless*, defining the following services: an API Gateway used to gather all the incoming requests from outside. This in turn is connected to a proper AWS Lambda according to the given url. Each Lambda is then connected to DynamoDB, used to manage all the operations on the fleet. We can fetch the whole fleet but we can also get, add, and delete a single car.<br/>
-Because there is no authentication nor authorization layer, all the HTTP requests must include an *API-KEY*, different for each environment. Without it you'll get a 403 (Forbidden) as a response.
+The whole back-end infrastructure is deployed using *serverless*, which defins the following services:
+
+- API Gateway: it acts as a "front-end" of the AWS infrastructure, gathering all the incoming requests from outside.
+- AWS Lambda: the API Gateway is connected to a proper AWS Lambda according to the given url. This will helps us managing all the different operations on the dataset.
+- DynamoDB: a NoSQL database used to manage all the operations on the fleet dataset. We can fetch the whole fleet but we can also get, add, and delete a single car.
+
+Because there is no authentication nor authorization layer, all the HTTP requests must include an *API-KEY*, different for each environment. Without it you'll get a 403 (Forbidden) as a response from the API Gateway.
 
 ### Execution
 
-To test each AWS Lambda locally you should first run DynamoDB locally either installing it on your machine or inside a Docker container. Once it has been set up you should change the database connection on the Lambdas to point to the local one. Finally you can run a Lambda using this command:
+To test each AWS Lambda locally you should first run DynamoDB locally. To accomplish this you can run the **run-dinamo-db.sh** script inside the *dynamoDB* folder. Be careful, before running it you should have installed *Docker* and edited the *aws-configure.sh* script to use your AWS account replacing *** with your credentials. Finally you can run a Lambda using this command:
 
 ```bash
-serverless invoke -f "function-name" -l
+serverless invoke local -f "function-name" -e AWS_LOCAL=1
 ```
 
-where function-name is the name of the lambda function. The -f argument specifies the function to invoke and the -l flag tells serverless to output the logs to the console.
+where function-name is the name of the lambda function, the -f argument specifies the function to invoke, and -e the environment variable to run it locally. For other options please refer to this: https://www.serverless.com/framework/docs/providers/aws/cli-reference/invoke-local/.
 
 ### Testing
 
@@ -58,13 +63,15 @@ npm run test
 mocha -r ts-node/register ./**/*.spec.ts
 ```
 
+which runs all the *.spec.ts* files.
+
 ## Front-End
 
 The front-end application has been implemented using Angular to produce a Single Page Application (SPA). It's a Mobile First - namely it runs on any device and resolution - and Progressive Web App (PWA) application - meaning that you are able to access a cached version of the application when offline. In case a newer version of the application has been deployed the user is asked to reload the page.
 
-It is deployed using AWS Amplify. It's a tool provided by Amazon Web Service to help you deploy a Web Application in few steps, with the capability to manage multiple environments. It comes with interesting features, such as integration with HTTPS and *Restrict Access*. Thanks to that, specific environments can be accessed only with username and password (to access the *dev* environment you can use the following credentials, user: **test**, pwd: **testers**).
+It is deployed using AWS Amplify. It's a tool provided by Amazon Web Service to help you deploy a Web Application in few steps, with the capability to manage multiple environments. It comes with interesting features, such as integration with HTTPS and *Restrict Access*. Thanks to that, specific environments can be accessed only with username and password.
 
-### Execution
+### UI Execution
 
 To run the front-end application you only have to type:
 
@@ -86,7 +93,7 @@ won't work, because the production environment file doesn't contain valid API KE
 
 To run the application as a PWA, you need first to build it first with the *--prod* flag, then run a local web server in the same folder of the built application (I suggest using the http-server package for an easy deploy) and finally open the web page at the server address. You should see some error messages (because of the wrong keys) but you should be able to play with the application also in offline mode.
 
-### Testing
+### UI Testing
 
 There are 2 types of tests: *unit* and *integration*.
 To run unit tests just type:
@@ -127,13 +134,14 @@ Note that e2e tests are not running in *master* to prevent any database "polluti
 
 ## GitHub Pipeline
 
-To deploy both front-end and back-end I used the GitHub Pipeline, in order to automate the workflow of the application. Sensitive data are stored in the Secrets storage of the repository. Only authorized people can access them.
+To automate the workflow of the application, both front-end and back-end are deployed using GitHub Pipeline. Sensitive data are stored in the Secrets storage of the repository. Only authorized people can access them.
 
 The workflow is consisted of 2 steps:
 
 - **test**: here is where we run all the tests (unit and integration)
-- **deploy**: in which we deploy the front-end (using AWS Amplify) and the back-end (serverless) services
+- **deploy**: in which we deploy the front-end (using AWS Amplify) and the back-end (using serverless) services
 
-In case the *test* job fails, the *deploy* step is not executed and you'll receive an email containing the failing commit.<br/>
+Those 2 steps are replicated for front- and back-end. First start with the back-end steps, then if successful, start the front-end ones. This specific order comes to the rescue when any of the already deployed API are changed: you might get an error while running the front-end integration tests. With this solution we make sure that the new API are deployed before starting integrations tests on them.
+If the *test* job fails, the *deploy* step is not executed and you'll receive an email containing the failing commit.<br/>
 In order to deploy everything to the right environment the script make use of a variable named *STAGE*. It assumes the value *prod* in case of a push/pull-request to master, *dev* in all other cases (develop or feature/* branch).<br/>
 API KEYs replacements is performed using the powerful *sed* command, substituing the placeholders contained in the environment.prod.ts file of the UI with the respective value in the Secrets storage. This is executed for the *master* branch only.
