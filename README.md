@@ -2,7 +2,7 @@
 
 ![CI](https://github.com/sceccotti89/AutoSense/workflows/CI/badge.svg?branch=master)
 
-The AutoSense project is a fleet management online service designed and implemented using cutting-edge technologies such as Angular and AWS.
+The Fleet Manager project is a fleet management online service designed and implemented using cutting-edge technologies such as Angular and AWS.
 
 <!-- TOC depthFrom:2 depthTo:6 withLinks:1 updateOnSave:1 orderedList:0 -->
 
