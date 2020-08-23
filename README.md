@@ -63,7 +63,7 @@ Finally you can run **ALL** your *Lambda*s defined in the serverless.yml using t
 serverless offline --apiKey <api-key>
 ```
 
-where <api-key> is the API key used by the API Gateway. If not specified you get a 403 (Forbidden) as a response.
+where *api-key* is the API key used by the API Gateway. If not specified you get a 403 (Forbidden) as a response.
 
 ### Testing
 
