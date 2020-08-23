@@ -34,7 +34,7 @@ This architecture has been deployed for 2 different environments: **dev** (for t
 
 ## Back-End
 
-The whole back-end infrastructure is deployed using *serverless*, which defins the following services:
+The whole back-end infrastructure is deployed using *serverless*, inside of which are defined the following services:
 
 - API Gateway: it acts as a "front-end" of the AWS infrastructure, gathering all the incoming requests from outside.
 - AWS Lambda: the API Gateway is connected to a proper AWS Lambda according to the given url. This will helps us managing all the different operations on the dataset.
@@ -50,13 +50,20 @@ First we need to install the required packages this way:
 npm install
 ```
 
-To execute an AWS Lambda locally you should first run DynamoDB on your machine. To accomplish this you can run the **run-dinamo-db.sh** script inside the *dynamoDB* folder. Be careful, before running it you should have installed *Docker* and edited the *aws-configure.sh* script to use your AWS account replacing *** with your credentials. Finally you can run a Lambda using this command:
+To execute an AWS Lambda locally you should first run DynamoDB on your machine. To accomplish this you can run the **run-dinamo-db.sh** script inside the *dynamoDB* folder using the following command:
 
 ```bash
-serverless invoke local -f "function-name" -e AWS_LOCAL=1
+sh run-dynamo-db.sh <aws_access_key> <aws_secret_access_key>
 ```
 
-where function-name is the name of the lambda function, the -f argument specifies the function to invoke, and -e the environment variable to run it locally. For other options please refer to this: https://www.serverless.com/framework/docs/providers/aws/cli-reference/invoke-local/.
+where *aws_access_key* and *aws_secret_access_key* are the credentials to log into your AWS account.<br/>
+Finally you can run **ALL** your *Lambda*s defined in the serverless.yml using this command (more information here: https://www.npmjs.com/package/serverless-offline#usage-and-command-line-options):
+
+```bash
+serverless offline --apiKey <api-key>
+```
+
+where <api-key> is the API key used by the API Gateway. If not specified you get a 403 (Forbidden) as a response.
 
 ### Testing
 
@@ -88,7 +95,14 @@ npm run start
 ng serve
 ```
 
-using the *dev* environment settings.<br/>
+using the *dev* environment settings. In case the application need to be tested locally (e.g. the backend is not deployed yet) you can run a local version of it:
+
+```bash
+ng serve -c local
+```
+
+Before running this command you should complete the backend *Execution* step first.
+
 The command:
 
 ```bash
