@@ -2,6 +2,7 @@
 
 if [ "$#" -lt 2 ]; then
     echo "Invalid number of parameters. Usage: sh run-dynamo-db.sh <aws_access_key> <aws_secret_access_key>"
+    exit 1
 fi
 
 # Builds and runs the dynamo-db docker container.

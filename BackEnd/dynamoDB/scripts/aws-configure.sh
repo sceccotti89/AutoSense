@@ -2,6 +2,7 @@
 
 if [ "$#" -lt 2 ]; then
     echo "Invalid number of parameters. Usage: sh aws-configure <aws_access_key> <aws_secret_access_key>"
+    exit 1
 fi
 
 aws configure set aws_access_key_id $1
