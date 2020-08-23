@@ -80,7 +80,7 @@ const getClientConfiguration = (): AWS.DynamoDB.ClientConfiguration => {
         region: 'eu-central-1',
         apiVersion: '2012-08-10'
     };
-    if (process.env.AWS_LOCAL) {
+    if (process.env.IS_OFFLINE) {
         configuration.endpoint = 'http://localhost:8500';
     }
     return configuration;
