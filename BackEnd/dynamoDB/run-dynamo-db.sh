@@ -1,7 +1,11 @@
 #!bin/bash
 
+if [ "$#" -lt 2 ]; then
+    echo "Invalid number of parameters. Usage: sh run-dynamo-db.sh <aws_access_key> <aws_secret_access_key>"
+fi
+
 # Builds and runs the dynamo-db docker container.
-docker build . -t dynamo-db
+docker build . -t dynamo-db --build-arg aws_access_key=$1 aws_secret_access_key=$2
 docker run -d -p 8500:8000 dynamo-db
 
 # Waits 3 seconds to let the container runs up.

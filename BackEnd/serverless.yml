@@ -11,6 +11,7 @@ custom:
 plugins:
   - 'serverless-webpack'
   - 'serverless-add-api-key'
+  - 'serverless-offline'
 provider:
   name: 'aws'
   runtime: 'nodejs12.x'
