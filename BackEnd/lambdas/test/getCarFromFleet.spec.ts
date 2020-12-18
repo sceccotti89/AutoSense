@@ -66,16 +66,6 @@ describe("getCarFromFleet.handler", () => {
         expect(response.body).to.deep.eq(mockResponse.body);
     });
 
-    it('should call dynamo db getItem and return 500 due to internal error', async () => {
-        const event: APIGatewayProxyEvent = createEvent(mockId);
-
-        dynamoDbStub.returns(Promise.reject(new Response(HttpStatus.INTERNAL_SERVER_ERROR, "Error whilst deleting input data")));
-        
-        const response = <APIGatewayProxyResult> await handler(event, null, null);
-        expect(response.statusCode).to.equal(HttpStatus.INTERNAL_SERVER_ERROR);
-        expect(response.body).to.equal('{\n  "message": "Error whilst deleting input data"\n}');
-    });
-
     afterEach(() => {
         dynamoDbStub.restore();
     });
