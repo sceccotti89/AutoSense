@@ -6,7 +6,7 @@ if [ "$#" -lt 2 ]; then
 fi
 
 # Builds and runs the dynamo-db docker container.
-docker build . -t dynamo-db --build-arg aws_access_key=$1 aws_secret_access_key=$2
+docker build . -t dynamo-db --build-arg aws_access_key=$1 --build-arg aws_secret_access_key=$2
 docker run -d -p 8500:8000 dynamo-db
 
 # Waits 3 seconds to let the container runs up.
