@@ -6,9 +6,6 @@ on:
   pull_request:
     branches: [ master ]
 
-env:
-  IS_PROD_OR_DEV: github.ref == 'refs/heads/master' || github.ref == 'refs/heads/develop'
-
 jobs:
   test_backend:
     runs-on: ubuntu-latest
