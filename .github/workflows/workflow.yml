@@ -44,8 +44,8 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       
-      - run: echo "::set-env name=STAGE::$(if [ ${{ github.ref }} == 'refs/heads/master' ]; then echo 'prod'; else echo 'dev'; fi)"
-      - run: echo "::set-env name=AWS_API_KEY::$(if [ ${{ github.ref }} == 'refs/heads/master' ]; then echo ${{ secrets.AWS_API_KEY_PROD }}; else echo ${{ secrets.AWS_API_KEY_DEV }}; fi)"
+      - run: echo "STAGE=$(if [ ${{ github.ref }} == 'refs/heads/master' ]; then echo 'prod'; else echo 'dev'; fi)" >> $GITHUB_ENV
+      - run: echo "AWS_API_KEY=$(if [ ${{ github.ref }} == 'refs/heads/master' ]; then echo ${{ secrets.AWS_API_KEY_PROD }}; else echo ${{ secrets.AWS_API_KEY_DEV }}; fi)" >> $GITHUB_ENV
 
       - name: Cache node modules
         if: github.ref == 'refs/heads/master' || github.ref == 'refs/heads/develop'
@@ -119,7 +119,7 @@ jobs:
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/master' || github.ref == 'refs/heads/develop'
     steps:
-      - run: echo "::set-env name=STAGE::$(if [ ${{ github.ref }} == 'refs/heads/master' ]; then echo 'prod'; else echo 'dev'; fi)"
+      - run: echo "STAGE=$(if [ ${{ github.ref }} == 'refs/heads/master' ]; then echo 'prod'; else echo 'dev'; fi)" >> $GITHUB_ENV
       
       - name: Cache node modules
         uses: actions/cache@v2
