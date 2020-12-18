@@ -1,7 +1,7 @@
 {
   "name": "backend",
   "version": "1.0.0",
-  "description": "AWS using Typescript with Serverless",
+  "description": "Backend implementation for the fleet manager",
   "main": "handler.js",
   "scripts": {
     "test": "mocha -r ts-node/register ./**/*.spec.ts"
@@ -36,6 +36,6 @@
     "webpack": "^4.29.0",
     "webpack-node-externals": "^1.7.2"
   },
-  "author": "The serverless webpack authors (https://github.com/elastic-coders/serverless-webpack)",
+  "author": "Stefano Ceccotti",
   "license": "MIT"
 }
