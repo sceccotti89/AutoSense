@@ -36,7 +36,7 @@ const validateRequest = (data: Car): Promise<Response> => {
         console.log(errors);
         reject(new Response(HttpStatus.BAD_REQUEST, errors));
       } else {
-        resolve();
+        resolve(null);
       }
     });
   });

@@ -1,6 +1,14 @@
 service:
   name: 'backend'
+
 frameworkVersion: '>=1.72.0'
+
+plugins:
+  - 'serverless-webpack'
+  - 'serverless-s3-local'
+  - 'serverless-add-api-key'
+  - 'serverless-offline'
+
 custom:
   webpack:
     webpackConfig: './webpack.config.js'
@@ -8,11 +16,14 @@ custom:
   apiKeys:
     - name: 'auto-sense-${opt:stage, self:provider.stage, "dev"}'
       value: '${opt:api_key}'
-plugins:
-  - 'serverless-webpack'
-  - 'serverless-add-api-key'
-  - 'serverless-offline'
+  s3:
+    port: 8000
+    host: localhost
+    directory: /tmp
+    cors: false
+
 provider:
+  stage: dev
   name: 'aws'
   runtime: 'nodejs12.x'
   apiGateway:
@@ -66,6 +77,26 @@ functions:
           path: 'delete-car-fleet/{carId}'
           cors: true
           private: true
+  s3hook:
+    handler: lambdas/src/s3Test.s3hook
+    events:
+      - s3:
+          bucket: local-bucket
+          event: s3:*
+  s3test:
+    handler: 'lambdas/src/s3Test.handler'
+    name: 's3test'
+    events:
+      - http:
+          method: 'get'
+          path: 's3'
+
 resources:
-  - ${file(aws-serverless/api-gateway-errors.yml)}
-  - ${file(aws-serverless/dynamo-db-tables.yml)}
+  Resources:
+    NewResource:
+      Type: AWS::S3::Bucket
+      Properties:
+        BucketName: local-bucket
+# resources:
+  # - ${file(aws-serverless/api-gateway-errors.yml)}
+  # - ${file(aws-serverless/dynamo-db-tables.yml)}

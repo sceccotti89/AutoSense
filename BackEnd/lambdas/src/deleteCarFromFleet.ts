@@ -31,7 +31,7 @@ const validateRequest = (event: APIGatewayProxyEvent): Promise<Response> => {
       console.log("Missing or invalid path parameter 'carId'");
       reject(new Response(HttpStatus.BAD_REQUEST, "Missing or invalid path parameter 'carId'"));
     } else {
-      resolve();
+      resolve(null);
     }
   });
 };
